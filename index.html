@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet data-dc-atomics>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&amp;family=Barlow:wght@500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>html,body{margin:0;height:100%;background:#dde8e7;font-family:'Noto Sans TC',system-ui,sans-serif}a{color:#0f5e6e}a:hover{color:#1d8a97}::-webkit-scrollbar{width:0;height:0}</style>
+</helmet>
+<div style="min-height:100dvh;background:#dde8e7;display:flex;justify-content:center">
+<div data-screen-label="旅程 App" style="width:100%;max-width:430px;height:100dvh;display:flex;flex-direction:column;background:#fbfdfd;box-shadow:0 0 44px rgba(15,60,70,.18);overflow:hidden">
+
+<sc-if value="{{ isItin }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;flex:1;min-height:0">
+<div style="padding:16px 20px 0;background:#fff">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+<div style="font:900 17px/1.3 'Noto Sans TC',sans-serif;color:#14313a">名古屋・伊勢志摩</div>
+<div style="font:700 11px Barlow,sans-serif;color:#6b8a91;letter-spacing:.5px">2026 11/15–11/23</div>
+</div>
+<div style="display:flex;gap:6px;overflow-x:auto;padding:12px 0;scrollbar-width:none">
+<sc-for list="{{ navD }}" as="p" hint-placeholder-count="9">
+<div onClick="{{ p.go }}" style="{{ p.pillStyle }}">
+<div style="font:700 15px Barlow,sans-serif">{{ p.date }}</div>
+<div style="font:500 10px 'Noto Sans TC',sans-serif;opacity:.85">{{ p.dow }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="padding:13px 20px 11px;background:linear-gradient(135deg,#e3f1f0,#f4faf9);border-top:1px solid #edf4f3;border-bottom:1px solid #e0ecec">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+<div style="font:900 19px/1.3 'Noto Sans TC',sans-serif;color:#123640">{{ d.label }}</div>
+<div style="font:700 12px Barlow,sans-serif;color:#1d7a8c;flex:none">{{ d.date }} {{ d.dow }}</div>
+</div>
+<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap;align-items:center">
+<span style="font:500 10.5px 'Noto Sans TC',sans-serif;color:#33606b;background:#ffffffcc;border:1px solid #d3e5e5;border-radius:999px;padding:2px 9px">{{ d.area }}</span>
+<span style="font:500 10.5px 'Noto Sans TC',sans-serif;color:#33606b;background:#ffffffcc;border:1px solid #d3e5e5;border-radius:999px;padding:2px 9px">宿：{{ d.stay }}</span>
+<span onClick="{{ starTap }}" style="{{ starChip }}">只看必去 ★</span>
+</div>
+</div>
+<div style="flex:1;overflow-y:auto;padding:16px 16px 26px;scrollbar-width:none">
+<sc-for list="{{ ev }}" as="e" hint-placeholder-count="6">
+<div onClick="{{ e.tap }}" style="display:flex;cursor:pointer">
+<div style="width:42px;flex:none;text-align:right;padding-right:9px;padding-top:1px;font:700 12px Barlow,sans-serif;color:#3c6570">{{ e.t }}</div>
+<div style="width:16px;flex:none;display:flex;flex-direction:column;align-items:center">
+<div style="{{ e.dotStyle }}"></div>
+<div style="width:2px;flex:1;background:#dcebea;margin-top:3px"></div>
+</div>
+<div style="flex:1;min-width:0;padding:0 0 16px 9px">
+<div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+<span style="{{ e.chipStyle }}">{{ e.g }}</span>
+<span style="font:700 14px/1.4 'Noto Sans TC',sans-serif;color:#16323a">{{ e.title }}</span>
+<span style="color:#e8a13d;font:700 12px sans-serif">{{ e.star }}</span>
+</div>
+<div style="{{ e.noteStyle }}">{{ e.note }}</div>
+</div>
+</div>
+</sc-for>
+<sc-if value="{{ dHasNotes }}" hint-placeholder-val="{{ false }}">
+<div style="margin:2px 0 0 28px;background:#fdf6e7;border:1px solid #f0dfb4;border-radius:12px;padding:10px 13px">
+<div style="font:700 10.5px 'Noto Sans TC',sans-serif;color:#a9741f;letter-spacing:3px;margin-bottom:3px">本日備註</div>
+<sc-for list="{{ dNotes }}" as="n" hint-placeholder-count="1">
+<div style="font:400 11.5px/1.65 'Noto Sans TC',sans-serif;color:#6f5c34;padding:1px 0">・{{ n.txt }}</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isHotel }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;flex:1;min-height:0">
+<div style="padding:16px 20px 12px;background:#fff;border-bottom:1px solid #e0ecec">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:900 17px/1.3 'Noto Sans TC',sans-serif;color:#14313a">住宿</div>
+<div style="font:600 11px 'Noto Sans TC',sans-serif;color:#1d8a97">{{ hotelCount }} 間都訂好了</div>
+</div>
+<div style="font:400 11px/1.6 'Noto Sans TC',sans-serif;color:#7d979d;margin-top:3px">兩人總計 <span style="font:700 11px Barlow,sans-serif;color:#33606b">{{ hotelSumYen }}</span>（{{ hotelSumTwd }}）・只列已確認的訂房</div>
+</div>
+<div style="flex:1;overflow-y:auto;padding:14px 16px 26px;scrollbar-width:none">
+<sc-for list="{{ hotels }}" as="h" hint-placeholder-count="5">
+<div style="{{ h.cardStyle }}">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+<span style="font:700 10.5px 'Noto Sans TC',sans-serif;color:#0f5e6e;background:#e2f1f1;border-radius:999px;padding:2px 10px;flex:none">{{ h.area }}</span>
+<span style="font:600 11px Barlow,sans-serif;color:#6b8a91">{{ h.dates }}・{{ h.nights }}</span>
+</div>
+<div style="font:700 14.5px/1.4 'Noto Sans TC',sans-serif;color:#14313a;margin-top:8px">{{ h.name }}</div>
+<div style="font:400 11px/1.5 'Noto Sans TC',sans-serif;color:#8aa0a6;margin-top:2px">{{ h.room }}</div>
+<div style="display:flex;align-items:baseline;gap:7px;margin-top:8px">
+<span style="font:800 16px Barlow,sans-serif;color:#0f5e6e">{{ h.priceY }}</span>
+<span style="font:500 10.5px 'Noto Sans TC',sans-serif;color:#8aa0a6">{{ h.twdS }}</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px;border-top:1px solid #eef4f3;margin-top:10px;padding-top:9px">
+<div style="font:400 11.5px/1.6 'Noto Sans TC',sans-serif;color:#5f7a80"><span style="font-weight:700;color:#33606b">餐食</span>　{{ h.meals }}</div>
+<div style="font:400 11.5px/1.6 'Noto Sans TC',sans-serif;color:#5f7a80"><span style="font-weight:700;color:#33606b">車站</span>　{{ h.station }}</div>
+<div style="font:400 11.5px/1.6 'Noto Sans TC',sans-serif;color:#5f7a80"><span style="font-weight:700;color:#33606b">取消</span>　{{ h.cancel }}</div>
+</div>
+<div style="{{ h.refStyle }}">{{ h.ref }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isLedger }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;flex:1;min-height:0">
+<div style="padding:16px 20px 12px;background:#fff;border-bottom:1px solid #e0ecec">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:900 17px/1.3 'Noto Sans TC',sans-serif;color:#14313a">帳目（預估）</div>
+<div style="font:600 10.5px 'Noto Sans TC',sans-serif;color:#8aa0a6">{{ ledRate }}</div>
+</div>
+<div style="font:400 11px/1.6 'Noto Sans TC',sans-serif;color:#7d979d;margin-top:3px">{{ ledScope }}</div>
+</div>
+<div style="flex:1;overflow-y:auto;padding:14px 16px 26px;scrollbar-width:none">
+<div style="border-radius:18px;padding:15px 17px;color:#fff;background:linear-gradient(140deg,#0f5e6e,#1f8fa0);box-shadow:0 10px 24px rgba(15,94,110,.25);margin-bottom:14px">
+<div style="font:500 11px 'Noto Sans TC',sans-serif;opacity:.85">每人合計</div>
+<div style="display:flex;align-items:baseline;gap:8px;margin-top:2px">
+<span style="font:800 28px Barlow,sans-serif">{{ ledTotalYen }}</span>
+<span style="font:600 12px 'Noto Sans TC',sans-serif;opacity:.9">{{ ledTotalTwd }}</span>
+</div>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:12px">
+<sc-for list="{{ ledChips }}" as="c" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.13);border-radius:10px;padding:6px 10px">
+<div style="{{ c.dotStyle }}"></div>
+<span style="font:500 11px 'Noto Sans TC',sans-serif">{{ c.name }}</span>
+<span style="font:700 11px Barlow,sans-serif;margin-left:auto">{{ c.amt }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+<sc-for list="{{ ledRows }}" as="r" hint-placeholder-count="9">
+<div onClick="{{ r.tap }}" style="background:#fff;border:1px solid #e0ecec;border-radius:14px;padding:12px 14px;margin-bottom:8px;cursor:pointer">
+<div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px">
+<span style="font:700 13px Barlow,sans-serif;color:#14313a">{{ r.date }} <span style="font:500 10.5px 'Noto Sans TC',sans-serif;color:#8aa0a6">{{ r.dow }}</span></span>
+<span style="display:flex;align-items:baseline;gap:6px"><span style="font:800 13px Barlow,sans-serif;color:#0f5e6e">{{ r.yen }}</span><span style="font:500 10.5px Barlow,sans-serif;color:#8aa0a6">{{ r.twd }}</span><span style="font:500 10px sans-serif;color:#8aa0a6">{{ r.arrow }}</span></span>
+</div>
+<div style="display:flex;height:6px;border-radius:3px;overflow:hidden;margin-top:9px;background:#eef4f3">
+<sc-for list="{{ r.segs }}" as="s" hint-placeholder-count="4">
+<div style="{{ s.st }}"></div>
+</sc-for>
+</div>
+<div style="{{ r.dStyle }}">
+<div style="font:600 10.5px 'Noto Sans TC',sans-serif;color:#6b8a91;margin-top:9px;letter-spacing:.3px">{{ r.detail }}</div>
+<div style="font:400 11.5px/1.65 'Noto Sans TC',sans-serif;color:#5f7a80;margin-top:5px">{{ r.note }}</div>
+</div>
+</div>
+</sc-for>
+<div style="font:400 10.5px/1.6 'Noto Sans TC',sans-serif;color:#9bafb4;text-align:center;margin-top:10px">點每一天可展開明細・金額同步自 Sheet「帳目表」</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isBook }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;flex:1;min-height:0">
+<div style="padding:16px 20px 12px;background:#fff;border-bottom:1px solid #e0ecec">
+<div style="display:flex;justify-content:space-between;align-items:baseline">
+<div style="font:900 17px/1.3 'Noto Sans TC',sans-serif;color:#14313a">待預訂</div>
+<div style="font:600 11px 'Noto Sans TC',sans-serif;color:#c9822a">還有 {{ todoCount }} 項待辦</div>
+</div>
+<div style="font:400 11px/1.6 'Noto Sans TC',sans-serif;color:#7d979d;margin-top:3px">同步自 Sheet「待預訂的清單」</div>
+</div>
+<div style="flex:1;overflow-y:auto;padding:14px 16px 26px;scrollbar-width:none">
+<sc-for list="{{ books }}" as="b" hint-placeholder-count="6">
+<div style="{{ b.cardStyle }}">
+<div style="display:flex;justify-content:space-between;align-items:center;gap:8px">
+<span style="{{ b.pillStyle }}">{{ b.pill }}</span>
+<span style="font:600 10.5px 'Noto Sans TC',sans-serif;color:#8aa0a6;text-align:right">{{ b.when }}</span>
+</div>
+<div style="font:700 13.5px/1.5 'Noto Sans TC',sans-serif;color:#14313a;margin-top:6px">{{ b.title }}</div>
+<div style="font:400 11.5px/1.6 'Noto Sans TC',sans-serif;color:#5f7a80;margin-top:3px">{{ b.note }}</div>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<div style="display:flex;background:#fff;border-top:1px solid #e2ecec;padding:9px 6px 16px;flex:none">
+<sc-for list="{{ tabs }}" as="t" hint-placeholder-count="4">
+<div onClick="{{ t.go }}" style="flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer">
+<div style="{{ t.dotStyle }}"></div>
+<span style="display:flex;align-items:center;gap:4px">
+<span style="{{ t.txtStyle }}">{{ t.label }}</span>
+<span style="{{ t.badgeStyle }}">{{ t.badge }}</span>
+</span>
+</div>
+</sc-for>
+</div>
+
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;defaultExpandNotes&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;行程顯示&quot;}}">
+class Component extends DCLogic {
+  state = { days: [], bookings: [], ledger: { rows: [], total: {} }, hotels: [], tab: "itin", day: 0, star: false, exp: {} };
+  componentDidMount() {
+    import("./trip-data.js").then((m) => {
+      let sv = {};
+      try { sv = JSON.parse(localStorage.getItem("jt_v1") || "{}"); } catch (e) {}
+      this.setState({
+        days: m.TRIP.days, bookings: m.BOOKINGS || [], ledger: m.LEDGER || { rows: [], total: {} }, hotels: m.HOTELS || [],
+        tab: ["itin", "hotel", "ledger", "book"].includes(sv.tab) ? sv.tab : "itin",
+        day: Number.isInteger(sv.day) && sv.day >= 0 && sv.day < m.TRIP.days.length ? sv.day : 0,
+        star: !!sv.star
+      });
+    });
+  }
+  up(p) {
+    this.setState(p, () => {
+      const { tab, day, star } = this.state;
+      try { localStorage.setItem("jt_v1", JSON.stringify({ tab, day, star })); } catch (e) {}
+    });
+  }
+  renderVals() {
+    const CAT = { flight: ["航", "#3d7fa6"], transit: ["車", "#64828f"], sight: ["景", "#2e8f74"], food: ["食", "#c9822a"], hotel: ["宿", "#46708e"], onsen: ["湯", "#3d96a8"], shop: ["購", "#b3873b"], free: ["閒", "#7d939b"] };
+    const S = this.state, d = S.days[S.day] || {};
+    const yen = (n) => "¥" + (n || 0).toLocaleString("en-US");
+    let list = d.events || [];
+    if (S.star) list = list.filter((e) => e.star);
+    const ev = list.map((e, i) => {
+      const id = S.day + "-" + i, m = CAT[e.cat] || CAT.free, c = m[1];
+      const open = S.exp[id] !== undefined ? S.exp[id] : (this.props.defaultExpandNotes ?? false);
+      return {
+        t: e.t, title: e.title, note: e.note || "", g: m[0],
+        star: e.star ? (e.star > 1 ? "★★" : "★") : "",
+        noteStyle: e.note ? Object.assign({ font: "400 11.5px/1.6 'Noto Sans TC',sans-serif", color: "#5f7a80", marginTop: "4px" }, open ? {} : { overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }) : { display: "none" },
+        tap: () => this.setState((s) => ({ exp: Object.assign({}, s.exp, { [id]: !open }) })),
+        dotStyle: { width: "10px", height: "10px", borderRadius: "50%", background: c, marginTop: "4px", boxShadow: "0 0 0 3px " + c + "22", flex: "none" },
+        chipStyle: { font: "700 10px 'Noto Sans TC',sans-serif", color: c, background: c + "18", padding: "2px 6px", borderRadius: "6px", flex: "none" }
+      };
+    });
+    const navD = S.days.map((x, i) => ({
+      date: x.date.split("/")[1], dow: x.dow, go: () => this.up({ day: i }),
+      pillStyle: { flex: "none", width: "44px", padding: "7px 0 6px", borderRadius: "12px", textAlign: "center", cursor: "pointer", background: i === S.day ? "#0f5e6e" : "#fff", color: i === S.day ? "#fff" : "#41626b", border: "1px solid " + (i === S.day ? "#0f5e6e" : "#d5e5e6") }
+    }));
+    const ST = { done: ["已訂", "#1d8a97", "#e2f1f1"], todo: ["待訂", "#c9822a", "#fdf3dd"], buy: ["現場買", "#46708e", "#e8eef4"], info: ["參考", "#7d939b", "#eef1f2"] };
+    const books = S.bookings.map((b) => {
+      const s = ST[b.status] || ST.todo;
+      return {
+        title: b.title, when: b.when, note: b.note, pill: s[0],
+        pillStyle: { font: "700 10.5px 'Noto Sans TC',sans-serif", color: s[1], background: s[2], borderRadius: "999px", padding: "2px 9px", flex: "none" },
+        cardStyle: { background: b.hot ? "#fffdf6" : "#fff", border: "1px solid " + (b.hot ? "#f0ddb0" : "#e0ecec"), borderRadius: "14px", padding: "12px 14px", marginBottom: "10px", boxShadow: "0 2px 8px rgba(18,56,64,.05)" }
+      };
+    });
+    const todoCount = S.bookings.filter((b) => b.status === "todo" || b.status === "buy").length;
+    const CATS = [["交通", "#7a95a3", "tr"], ["門票", "#2e8f74", "tk"], ["三餐", "#e0a04c", "fd"], ["住宿", "#3d96a8", "st"]];
+    const led = S.ledger, lt = led.total || {};
+    const ledRows = (led.rows || []).map((r, i) => {
+      const open = !!S.exp["L" + i];
+      return {
+        date: r.date, dow: r.dow, yen: yen(r.total), twd: "NT$" + (r.twd || 0).toLocaleString("en-US"),
+        arrow: open ? "▾" : "▸", note: r.note,
+        detail: CATS.map((c) => c[0] + " " + yen(r[c[2]])).join("・"),
+        segs: CATS.map((c) => ({ st: { width: (r.total ? (r[c[2]] / r.total * 100) : 0) + "%", background: c[1] } })),
+        dStyle: { display: open ? "block" : "none" },
+        tap: () => this.setState((s) => ({ exp: Object.assign({}, s.exp, { ["L" + i]: !open }) }))
+      };
+    });
+    const ledChips = CATS.map((c) => ({ name: c[0], amt: yen(lt[c[2]]), dotStyle: { width: "8px", height: "8px", borderRadius: "50%", background: c[1], flex: "none" } }));
+    const hotels = S.hotels.map((h) => ({
+      area: h.area, dates: h.dates, nights: h.nights, name: h.name, room: h.room,
+      priceY: yen(h.price), twdS: "≈ NT$" + (h.twd || 0).toLocaleString("en-US"),
+      meals: h.meals, station: h.station, cancel: h.cancel, ref: h.ref || "",
+      refStyle: h.ref ? { font: "600 10.5px 'Noto Sans TC',sans-serif", color: "#a9741f", background: "#fdf6e7", border: "1px solid #f0dfb4", borderRadius: "9px", padding: "6px 10px", marginTop: "9px" } : { display: "none" },
+      cardStyle: { background: h.star ? "#fffdf6" : "#fff", border: "1px solid " + (h.star ? "#f0ddb0" : "#e0ecec"), borderRadius: "16px", padding: "13px 15px", marginBottom: "10px", boxShadow: "0 2px 8px rgba(18,56,64,.05)" }
+    }));
+    const hSum = S.hotels.reduce((a, h) => a + (h.price || 0), 0);
+    const hSumT = S.hotels.reduce((a, h) => a + (h.twd || 0), 0);
+    const defs = [["itin", "行程"], ["hotel", "住宿"], ["ledger", "帳目"], ["book", "待預訂"]];
+    const tabs = defs.map((t) => {
+      const on = S.tab === t[0];
+      return {
+        label: t[1], go: () => this.up({ tab: t[0] }),
+        dotStyle: { width: "5px", height: "5px", borderRadius: "50%", background: on ? "#0f5e6e" : "transparent" },
+        txtStyle: { font: (on ? "700" : "500") + " 11px 'Noto Sans TC',sans-serif", color: on ? "#0f5e6e" : "#9bafb4" },
+        badge: t[0] === "book" && todoCount ? String(todoCount) : "",
+        badgeStyle: t[0] === "book" && todoCount ? { font: "700 9px Barlow,sans-serif", color: "#fff", background: "#e8a13d", borderRadius: "999px", minWidth: "14px", height: "14px", display: "inline-flex", alignItems: "center", justifyContent: "center", padding: "0 3px" } : { display: "none" }
+      };
+    });
+    return {
+      isItin: S.tab === "itin", isHotel: S.tab === "hotel", isLedger: S.tab === "ledger", isBook: S.tab === "book",
+      d, ev, navD, books, todoCount, tabs,
+      dNotes: (d.notes || []).map((n) => ({ txt: n })), dHasNotes: !!(d.notes && d.notes.length),
+      starTap: () => this.up({ star: !S.star }),
+      starChip: { font: "700 10.5px 'Noto Sans TC',sans-serif", cursor: "pointer", borderRadius: "999px", padding: "2px 10px", marginLeft: "auto", color: S.star ? "#7a5a14" : "#8aa0a6", background: S.star ? "#f5d491" : "#ffffffcc", border: "1px solid " + (S.star ? "#e8a13d" : "#d3e5e5") },
+      ledRows, ledChips, ledRate: led.rateNote || "", ledScope: led.scope || "",
+      ledTotalYen: yen(lt.total), ledTotalTwd: "≈ NT$" + (lt.twd || 0).toLocaleString("en-US") + "／人",
+      hotels, hotelCount: S.hotels.length, hotelSumYen: yen(hSum), hotelSumTwd: "≈ NT$" + hSumT.toLocaleString("en-US")
+    };
+  }
+}
+</script>
+</body>
+</html>
